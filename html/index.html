@@ -4,88 +4,80 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ZENT — Dashboard Gastos Hormiga</title>
-  <!-- Bootstrap 5 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
-  <!-- ZENT CSS -->
   <link href="../css/zent.css" rel="stylesheet">
+  <style>
+    .section-view { display: none; }
+    .section-view.active { display: block; }
+    .config-toggle { display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid rgba(13,46,46,.06); }
+    .config-toggle:last-child { border-bottom:none; }
+    .toggle-switch { position:relative; width:42px; height:24px; flex-shrink:0; }
+    .toggle-switch input { opacity:0; width:0; height:0; }
+    .toggle-slider { position:absolute; inset:0; background:#D9C9A8; border-radius:24px; cursor:pointer; transition:.3s; }
+    .toggle-slider:before { content:''; position:absolute; width:18px; height:18px; left:3px; top:3px; background:white; border-radius:50%; transition:.3s; }
+    .toggle-switch input:checked + .toggle-slider { background:var(--teal-400,#2D9B9B); }
+    .toggle-switch input:checked + .toggle-slider:before { transform:translateX(18px); }
+    .objetivo-card { background:var(--white); border:1px solid rgba(13,46,46,.07); border-radius:16px; padding:22px; transition:box-shadow .2s, transform .2s; }
+    .objetivo-card:hover { box-shadow:0 8px 24px rgba(13,46,46,.12); transform:translateY(-2px); }
+    .alerta-item { display:flex; align-items:flex-start; gap:14px; padding:16px 24px; border-bottom:1px solid rgba(13,46,46,.05); transition:background .15s; }
+    .alerta-item:hover { background:var(--sand-50,#FDFAF3); }
+    .alerta-item:last-child { border-bottom:none; }
+    .alerta-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; margin-top:5px; }
+    .alerta-dot.red    { background:#D9614A; }
+    .alerta-dot.amber  { background:#E8A94A; }
+    .alerta-dot.green  { background:#10B981; }
+    .budget-edit-row { display:flex; align-items:center; gap:12px; padding:14px 0; border-bottom:1px solid rgba(13,46,46,.06); }
+    .budget-edit-row:last-child { border-bottom:none; }
+    .budget-edit-label { width:120px; font-size:13px; font-weight:500; }
+    .budget-range { flex:1; accent-color:var(--teal-500,#247A7A); }
+    .budget-edit-val { width:80px; font-family:'Syne',sans-serif; font-weight:600; font-size:13px; color:var(--teal-600,#1F6060); text-align:right; }
+  </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════
-     SIDEBAR
-═══════════════════════════════════════════ -->
+<!-- ═══ SIDEBAR ═══════════════════════════════ -->
 <aside id="sidebar">
-
   <div class="sidebar-logo">
     <div class="logo-mark">
       <div class="logo-icon">Z</div>
-      <div>
-        <div class="logo-text">ZENT</div>
-      </div>
+      <div><div class="logo-text">ZENT</div></div>
     </div>
     <div class="logo-slogan">Controla cada centavo</div>
   </div>
 
   <nav class="sidebar-nav">
     <div class="nav-section-label">Principal</div>
-
-    <a class="nav-item active" href="#">
-      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <rect x="3" y="3" width="7" height="7" rx="1.5" stroke-width="2"/>
-        <rect x="14" y="3" width="7" height="7" rx="1.5" stroke-width="2"/>
-        <rect x="3" y="14" width="7" height="7" rx="1.5" stroke-width="2"/>
-        <rect x="14" y="14" width="7" height="7" rx="1.5" stroke-width="2"/>
-      </svg>
+    <a class="nav-item active" href="#" data-section="dashboard">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke-width="2"/></svg>
       Dashboard
     </a>
-
-    <a class="nav-item" href="#">
-      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2" stroke-linecap="round"/>
-      </svg>
+    <a class="nav-item" href="#" data-section="gastos">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2" stroke-linecap="round"/></svg>
       Gastos
-      <span class="nav-badge">15</span>
+      <span class="nav-badge" id="badge-gastos">15</span>
     </a>
-
-    <a class="nav-item" href="#">
-      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-width="2" stroke-linecap="round"/>
-      </svg>
+    <a class="nav-item" href="#" data-section="analisis">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-width="2" stroke-linecap="round"/></svg>
       Análisis
     </a>
-
-    <a class="nav-item" href="#">
-      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" stroke-width="2" stroke-linecap="round"/>
-      </svg>
+    <a class="nav-item" href="#" data-section="presupuestos">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" stroke-width="2" stroke-linecap="round"/></svg>
       Presupuestos
     </a>
-
     <div class="nav-section-label" style="margin-top:16px">Metas</div>
-
-    <a class="nav-item" href="#">
-      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+    <a class="nav-item" href="#" data-section="objetivos">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       Objetivos
     </a>
-
-    <a class="nav-item" href="#">
-      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-width="2" stroke-linecap="round"/>
-      </svg>
+    <a class="nav-item" href="#" data-section="alertas">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-width="2" stroke-linecap="round"/></svg>
       Alertas
       <span class="nav-badge">3</span>
     </a>
-
     <div class="nav-section-label" style="margin-top:16px">Cuenta</div>
-
-    <a class="nav-item" href="#">
-      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke-width="2"/>
-      </svg>
+    <a class="nav-item" href="#" data-section="configuracion">
+      <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke-width="2"/></svg>
       Configuración
     </a>
   </nav>
@@ -101,297 +93,247 @@
   </div>
 </aside>
 
-<!-- ═══════════════════════════════════════════
-     MAIN CONTENT
-═══════════════════════════════════════════ -->
+<!-- ═══ MAIN ════════════════════════════════════ -->
 <main id="main">
 
   <!-- TOPBAR -->
   <header class="topbar">
     <button class="topbar-btn d-lg-none me-1" id="sidebar-toggle">
-      <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path d="M4 6h16M4 12h16M4 18h16" stroke-width="2" stroke-linecap="round"/>
-      </svg>
+      <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-width="2" stroke-linecap="round"/></svg>
     </button>
-
     <div>
-      <div class="topbar-title">Dashboard</div>
-      <div class="topbar-subtitle">Junio 2025 · Resumen general</div>
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+      <div class="topbar-subtitle" id="topbar-subtitle">Junio 2025 · Resumen general</div>
     </div>
-
     <div class="ms-auto d-flex align-items-center gap-2">
       <div class="topbar-search d-none d-md-flex">
-        <svg width="14" height="14" fill="none" stroke="#7A9898" viewBox="0 0 24 24">
-          <circle cx="11" cy="11" r="8" stroke-width="2"/>
-          <path d="m21 21-4.35-4.35" stroke-width="2" stroke-linecap="round"/>
-        </svg>
+        <svg width="14" height="14" fill="none" stroke="#7A9898" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" stroke-width="2"/><path d="m21 21-4.35-4.35" stroke-width="2" stroke-linecap="round"/></svg>
         <input id="search-gastos" type="text" placeholder="Buscar gasto…">
       </div>
-
-      <button class="topbar-btn" title="Exportar">
-        <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-width="2" stroke-linecap="round"/>
-        </svg>
+      <button class="topbar-btn" title="Exportar" onclick="showToast('📥 Exportando…','success')">
+        <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-width="2" stroke-linecap="round"/></svg>
       </button>
-
-      <button class="topbar-btn" title="Notificaciones">
-        <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-width="2" stroke-linecap="round"/>
-        </svg>
+      <button class="topbar-btn" title="Alertas" data-section-btn="alertas">
+        <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-width="2" stroke-linecap="round"/></svg>
         <span class="notif-dot"></span>
       </button>
-
       <button class="btn-primary" data-bs-toggle="modal" data-bs-target="#modalGasto">
-        <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path d="M12 4v16m8-8H4" stroke-width="2.5" stroke-linecap="round"/>
-        </svg>
+        <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-width="2.5" stroke-linecap="round"/></svg>
         Agregar
       </button>
     </div>
   </header>
 
-  <!-- PAGE BODY -->
-  <div class="page-body">
-
-    <!-- ALERTA -->
+  <!-- ① DASHBOARD ─────────────────────────── -->
+  <div class="page-body section-view active" id="sec-dashboard">
     <div class="alert-zent">
       <span class="alert-icon">⚠️</span>
-      <span class="alert-text"><strong>¡Atención!</strong> Llevas <strong>$225,800</strong> en gastos hormiga este mes — ya alcanzaste el 64% de tu presupuesto. ¡Aún puedes controlarlo!</span>
+      <span class="alert-text"><strong>¡Atención!</strong> Llevas <strong>$225,800</strong> en gastos este mes — 64% de tu presupuesto. ¡Aún puedes controlarlo!</span>
     </div>
-
-    <!-- KPI CARDS -->
     <div class="row g-3 mb-4">
-      <div class="col-6 col-xl-3">
-        <div class="kpi-card danger">
-          <div class="kpi-header">
-            <div class="kpi-icon coral">💸</div>
-            <span class="kpi-change down">+8.2%</span>
-          </div>
-          <div>
-            <div class="kpi-value" id="kpi-total">$225,800</div>
-            <div class="kpi-label">Total del mes</div>
-          </div>
-          <canvas id="spark1" class="kpi-sparkline" width="120" height="36"></canvas>
-        </div>
-      </div>
-
-      <div class="col-6 col-xl-3">
-        <div class="kpi-card warning">
-          <div class="kpi-header">
-            <div class="kpi-icon amber">🔄</div>
-            <span class="kpi-change down">−3 subs</span>
-          </div>
-          <div>
-            <div class="kpi-value" id="kpi-recurrente">$42,700</div>
-            <div class="kpi-label">Recurrentes</div>
-          </div>
-          <canvas id="spark2" class="kpi-sparkline" width="120" height="36"></canvas>
-        </div>
-      </div>
-
-      <div class="col-6 col-xl-3">
-        <div class="kpi-card success">
-          <div class="kpi-header">
-            <div class="kpi-icon teal">📋</div>
-            <span class="kpi-change up">+5</span>
-          </div>
-          <div>
-            <div class="kpi-value" id="kpi-transacciones">15</div>
-            <div class="kpi-label">Transacciones</div>
-          </div>
-          <canvas id="spark3" class="kpi-sparkline" width="120" height="36"></canvas>
-        </div>
-      </div>
-
-      <div class="col-6 col-xl-3">
-        <div class="kpi-card neutral">
-          <div class="kpi-header">
-            <div class="kpi-icon" style="background:var(--sand-300);color:var(--sand-900)">📅</div>
-            <span class="kpi-change up">Hoy</span>
-          </div>
-          <div>
-            <div class="kpi-value" id="kpi-hoy">$20,700</div>
-            <div class="kpi-label">Gasto de hoy</div>
-          </div>
-          <canvas id="spark4" class="kpi-sparkline" width="120" height="36"></canvas>
-        </div>
-      </div>
+      <div class="col-6 col-xl-3"><div class="kpi-card danger"><div class="kpi-header"><div class="kpi-icon coral">💸</div><span class="kpi-change down">+8.2%</span></div><div><div class="kpi-value" id="kpi-total">$225,800</div><div class="kpi-label">Total del mes</div></div><canvas id="spark1" class="kpi-sparkline" width="120" height="36"></canvas></div></div>
+      <div class="col-6 col-xl-3"><div class="kpi-card warning"><div class="kpi-header"><div class="kpi-icon amber">🔄</div><span class="kpi-change down">3 subs</span></div><div><div class="kpi-value" id="kpi-recurrente">$42,700</div><div class="kpi-label">Recurrentes</div></div><canvas id="spark2" class="kpi-sparkline" width="120" height="36"></canvas></div></div>
+      <div class="col-6 col-xl-3"><div class="kpi-card success"><div class="kpi-header"><div class="kpi-icon teal">📋</div><span class="kpi-change up">+5</span></div><div><div class="kpi-value" id="kpi-transacciones">15</div><div class="kpi-label">Transacciones</div></div><canvas id="spark3" class="kpi-sparkline" width="120" height="36"></canvas></div></div>
+      <div class="col-6 col-xl-3"><div class="kpi-card neutral"><div class="kpi-header"><div class="kpi-icon" style="background:var(--sand-300);color:var(--sand-900)">📅</div><span class="kpi-change up">Hoy</span></div><div><div class="kpi-value" id="kpi-hoy">$20,700</div><div class="kpi-label">Gasto de hoy</div></div><canvas id="spark4" class="kpi-sparkline" width="120" height="36"></canvas></div></div>
     </div>
-
-    <!-- GRAFICAS ROW -->
     <div class="row g-3 mb-4">
-
-      <!-- Barras Semanal -->
-      <div class="col-lg-8">
-        <div class="panel h-100">
-          <div class="panel-header">
-            <div>
-              <div class="panel-title">Evolución Semanal</div>
-              <div class="panel-subtitle">Gastos diarios esta semana vs semana anterior</div>
-            </div>
-            <div class="period-pills">
-              <button class="period-pill">1S</button>
-              <button class="period-pill active">1M</button>
-              <button class="period-pill">3M</button>
-            </div>
-          </div>
-          <div class="chart-wrap">
-            <canvas id="chartBar" height="200"></canvas>
-          </div>
-        </div>
-      </div>
-
-      <!-- Dona Categorías -->
-      <div class="col-lg-4">
-        <div class="panel h-100">
-          <div class="panel-header">
-            <div>
-              <div class="panel-title">Por Categoría</div>
-              <div class="panel-subtitle">Distribución del mes</div>
-            </div>
-          </div>
-          <div class="chart-wrap">
-            <canvas id="chartDona" height="230"></canvas>
-          </div>
-        </div>
-      </div>
+      <div class="col-lg-8"><div class="panel h-100"><div class="panel-header"><div><div class="panel-title">Evolución Semanal</div><div class="panel-subtitle">Esta semana vs semana anterior</div></div><div class="period-pills"><button class="period-pill">1S</button><button class="period-pill active">1M</button><button class="period-pill">3M</button></div></div><div class="chart-wrap"><canvas id="chartBar" height="200"></canvas></div></div></div>
+      <div class="col-lg-4"><div class="panel h-100"><div class="panel-header"><div><div class="panel-title">Por Categoría</div><div class="panel-subtitle">Distribución del mes</div></div></div><div class="chart-wrap"><canvas id="chartDona" height="230"></canvas></div></div></div>
     </div>
-
-    <!-- TABLA + SIDEBAR ─ ROW -->
     <div class="row g-3 mb-4">
-
-      <!-- Tabla gastos recientes -->
       <div class="col-lg-8">
         <div class="panel">
-          <div class="panel-header">
-            <div>
-              <div class="panel-title">Gastos Recientes</div>
-              <div class="panel-subtitle">Últimas 15 transacciones registradas</div>
-            </div>
-            <div class="panel-actions">
-              <button class="btn-outline" data-bs-toggle="modal" data-bs-target="#modalGasto">+ Nuevo</button>
-              <button class="btn-outline">Exportar</button>
-            </div>
-          </div>
-          <div style="overflow-x:auto">
-            <table class="zent-table">
-              <thead>
-                <tr>
-                  <th>Descripción</th>
-                  <th>Categoría</th>
-                  <th>Monto</th>
-                  <th>Estado</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="gastos-tbody"></tbody>
-            </table>
-          </div>
+          <div class="panel-header"><div><div class="panel-title">Gastos Recientes</div><div class="panel-subtitle">Últimas transacciones</div></div><div class="panel-actions"><button class="btn-outline" data-bs-toggle="modal" data-bs-target="#modalGasto">+ Nuevo</button></div></div>
+          <div style="overflow-x:auto"><table class="zent-table"><thead><tr><th>Descripción</th><th>Categoría</th><th>Monto</th><th>Estado</th><th></th></tr></thead><tbody id="gastos-tbody"></tbody></table></div>
         </div>
       </div>
-
-      <!-- Presupuesto y Tendencia -->
       <div class="col-lg-4 d-flex flex-column gap-3">
-
-        <!-- Insight Card -->
-        <div class="insight-card">
-          <div class="insight-title">🔥 Hormiga del mes</div>
-          <div class="insight-value">Comida</div>
-          <div class="insight-desc">Tu categoría con mayor gasto son los pedidos a domicilio y snacks. Representa el 32% del total.</div>
-          <span class="insight-tag">$71,500 acumulado</span>
-        </div>
-
-        <!-- Presupuesto por Categoría -->
-        <div class="panel flex-1">
-          <div class="panel-header">
-            <div>
-              <div class="panel-title">Presupuestos</div>
-              <div class="panel-subtitle">Uso mensual por categoría</div>
-            </div>
-          </div>
+        <div class="insight-card"><div class="insight-title">🔥 Hormiga del mes</div><div class="insight-value">Comida</div><div class="insight-desc">Pedidos a domicilio y snacks. Representa el 32% del total.</div><span class="insight-tag">$71,500 acumulado</span></div>
+        <div class="panel flex-1"><div class="panel-header"><div><div class="panel-title">Presupuestos</div><div class="panel-subtitle">Uso mensual</div></div></div>
           <div style="padding:16px 24px">
-
-            <div class="budget-item">
-              <div class="budget-row">
-                <div class="budget-category">🍔 Comida</div>
-                <div class="budget-amounts"><span>$71.5k</span> / $80k</div>
-              </div>
-              <div class="progress-track">
-                <div class="progress-fill" style="width:89%;background:#247A7A"></div>
-              </div>
-            </div>
-
-            <div class="budget-item">
-              <div class="budget-row">
-                <div class="budget-category">🚗 Transporte</div>
-                <div class="budget-amounts"><span>$16.6k</span> / $50k</div>
-              </div>
-              <div class="progress-track">
-                <div class="progress-fill" style="width:33%;background:#4DB8B8"></div>
-              </div>
-            </div>
-
-            <div class="budget-item">
-              <div class="budget-row">
-                <div class="budget-category">💻 Digital</div>
-                <div class="budget-amounts"><span>$42.7k</span> / $45k</div>
-              </div>
-              <div class="progress-track">
-                <div class="progress-fill" style="width:95%;background:#E8785F"></div>
-              </div>
-            </div>
-
-            <div class="budget-item">
-              <div class="budget-row">
-                <div class="budget-category">☕ Café</div>
-                <div class="budget-amounts"><span>$17k</span> / $30k</div>
-              </div>
-              <div class="progress-track">
-                <div class="progress-fill" style="width:57%;background:#B09970"></div>
-              </div>
-            </div>
-
-            <div class="budget-item">
-              <div class="budget-row">
-                <div class="budget-category">💊 Salud</div>
-                <div class="budget-amounts"><span>$34k</span> / $60k</div>
-              </div>
-              <div class="progress-track">
-                <div class="progress-fill" style="width:57%;background:#4BB8A8"></div>
-              </div>
-            </div>
-
+            <div class="budget-item"><div class="budget-row"><div class="budget-category">🍔 Comida</div><div class="budget-amounts"><span>$71.5k</span> / $80k</div></div><div class="progress-track"><div class="progress-fill" style="width:89%;background:#247A7A"></div></div></div>
+            <div class="budget-item"><div class="budget-row"><div class="budget-category">🚗 Transporte</div><div class="budget-amounts"><span>$16.6k</span> / $50k</div></div><div class="progress-track"><div class="progress-fill" style="width:33%;background:#4DB8B8"></div></div></div>
+            <div class="budget-item"><div class="budget-row"><div class="budget-category">💻 Digital</div><div class="budget-amounts"><span>$42.7k</span> / $45k</div></div><div class="progress-track"><div class="progress-fill" style="width:95%;background:#E8785F"></div></div></div>
+            <div class="budget-item"><div class="budget-row"><div class="budget-category">☕ Café</div><div class="budget-amounts"><span>$17k</span> / $30k</div></div><div class="progress-track"><div class="progress-fill" style="width:57%;background:#B09970"></div></div></div>
+            <div class="budget-item"><div class="budget-row"><div class="budget-category">💊 Salud</div><div class="budget-amounts"><span>$34k</span> / $60k</div></div><div class="progress-track"><div class="progress-fill" style="width:57%;background:#4BB8A8"></div></div></div>
           </div>
         </div>
       </div>
     </div>
+    <div class="row g-3"><div class="col-12"><div class="panel"><div class="panel-header"><div><div class="panel-title">Tendencia 2025</div><div class="panel-subtitle">Gastos acumulados vs presupuesto $350,000</div></div></div><div class="chart-wrap"><canvas id="chartLine" height="120"></canvas></div></div></div></div>
+  </div>
 
-    <!-- LÍNEA MENSUAL -->
+  <!-- ② GASTOS ─────────────────────────────── -->
+  <div class="page-body section-view" id="sec-gastos">
+    <div class="row g-3 mb-4">
+      <div class="col-md-3"><div class="kpi-card danger"><div class="kpi-header"><div class="kpi-icon coral">💸</div></div><div><div class="kpi-value">$225,800</div><div class="kpi-label">Total mes</div></div></div></div>
+      <div class="col-md-3"><div class="kpi-card warning"><div class="kpi-header"><div class="kpi-icon amber">📌</div></div><div><div class="kpi-value" id="g-count">15</div><div class="kpi-label">Transacciones</div></div></div></div>
+      <div class="col-md-3"><div class="kpi-card success"><div class="kpi-header"><div class="kpi-icon teal">📊</div></div><div><div class="kpi-value">$15,053</div><div class="kpi-label">Promedio/gasto</div></div></div></div>
+      <div class="col-md-3"><div class="kpi-card neutral"><div class="kpi-header"><div class="kpi-icon" style="background:var(--sand-300);color:var(--sand-900)">🔝</div></div><div><div class="kpi-value">$42,000</div><div class="kpi-label">Mayor gasto</div></div></div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header">
+        <div><div class="panel-title">Todos los Gastos</div><div class="panel-subtitle">Historial completo del mes</div></div>
+        <div class="panel-actions d-flex gap-2 flex-wrap">
+          <select id="filtro-cat" class="btn-outline" style="padding:6px 12px;font-size:12px;cursor:pointer;border-radius:8px">
+            <option value="">Todas las categorías</option>
+            <option value="food">🍔 Comida</option><option value="transport">🚗 Transporte</option>
+            <option value="cafe">☕ Café</option><option value="digital">💻 Digital</option>
+            <option value="health">💊 Salud</option><option value="leisure">🎭 Entret.</option>
+            <option value="beauty">💅 Belleza</option>
+          </select>
+          <button class="btn-primary" data-bs-toggle="modal" data-bs-target="#modalGasto">+ Agregar</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="zent-table">
+          <thead><tr><th>Descripción</th><th>Categoría</th><th>Monto</th><th>Fecha</th><th>Estado</th><th></th></tr></thead>
+          <tbody id="gastos-tbody-full"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ③ ANÁLISIS ───────────────────────────── -->
+  <div class="page-body section-view" id="sec-analisis">
+    <div class="row g-3 mb-4">
+      <div class="col-lg-6"><div class="panel h-100"><div class="panel-header"><div><div class="panel-title">Gasto por Categoría</div><div class="panel-subtitle">Distribución porcentual</div></div></div><div class="chart-wrap"><canvas id="chartDona2" height="260"></canvas></div></div></div>
+      <div class="col-lg-6"><div class="panel h-100"><div class="panel-header"><div><div class="panel-title">Comparativa Mensual</div><div class="panel-subtitle">Últimos 6 meses</div></div></div><div class="chart-wrap"><canvas id="chartLine2" height="260"></canvas></div></div></div>
+    </div>
+    <div class="row g-3 mb-4">
+      <div class="col-lg-8"><div class="panel h-100"><div class="panel-header"><div><div class="panel-title">Evolución Diaria</div><div class="panel-subtitle">Gasto día a día esta semana</div></div></div><div class="chart-wrap"><canvas id="chartBar2" height="200"></canvas></div></div></div>
+      <div class="col-lg-4"><div class="panel h-100"><div class="panel-header"><div><div class="panel-title">Top 5 Gastos</div><div class="panel-subtitle">Los más altos del mes</div></div></div><div style="padding:16px 0" id="top-gastos-list"></div></div></div>
+    </div>
     <div class="row g-3">
-      <div class="col-12">
+      <div class="col-md-4"><div class="insight-card"><div class="insight-title">📈 Tendencia</div><div class="insight-value">+8.2%</div><div class="insight-desc">Gastaste más que el mes anterior. La mayor subida fue en Comida (+$14k).</div><span class="insight-tag">vs Mayo 2025</span></div></div>
+      <div class="col-md-4"><div class="insight-card" style="background:linear-gradient(135deg,#1A4030,#2D6A4F)"><div class="insight-title">✅ Bajo control</div><div class="insight-value">Transporte</div><div class="insight-desc">Estás al 33% de tu presupuesto de transporte. ¡Excelente!</div><span class="insight-tag">$16,600 de $50,000</span></div></div>
+      <div class="col-md-4"><div class="insight-card" style="background:linear-gradient(135deg,#4A1A0E,#C0503A)"><div class="insight-title">⚠️ Riesgo de exceder</div><div class="insight-value">Digital</div><div class="insight-desc">Al 95% del presupuesto digital. Solo quedan $2,300.</div><span class="insight-tag">$42,700 de $45,000</span></div></div>
+    </div>
+  </div>
+
+  <!-- ④ PRESUPUESTOS ───────────────────────── -->
+  <div class="page-body section-view" id="sec-presupuestos">
+    <div class="row g-3 mb-4">
+      <div class="col-md-4"><div class="kpi-card success"><div class="kpi-header"><div class="kpi-icon teal">✅</div></div><div><div class="kpi-value">3</div><div class="kpi-label">En orden</div></div></div></div>
+      <div class="col-md-4"><div class="kpi-card warning"><div class="kpi-header"><div class="kpi-icon amber">⚠️</div></div><div><div class="kpi-value">2</div><div class="kpi-label">En alerta</div></div></div></div>
+      <div class="col-md-4"><div class="kpi-card danger"><div class="kpi-header"><div class="kpi-icon coral">🚨</div></div><div><div class="kpi-value">1</div><div class="kpi-label">Por exceder</div></div></div></div>
+    </div>
+    <div class="row g-3 mb-4" id="budget-cards-container"></div>
+    <div class="panel">
+      <div class="panel-header"><div><div class="panel-title">Ajustar Presupuestos Mensuales</div><div class="panel-subtitle">Arrastra para cambiar el límite de cada categoría</div></div></div>
+      <div style="padding:24px"><div id="budget-sliders"></div></div>
+    </div>
+  </div>
+
+  <!-- ⑤ OBJETIVOS ──────────────────────────── -->
+  <div class="page-body section-view" id="sec-objetivos">
+    <div class="row g-3 mb-4">
+      <div class="col-md-4"><div class="kpi-card success"><div class="kpi-header"><div class="kpi-icon teal">🎯</div></div><div><div class="kpi-value">4</div><div class="kpi-label">Activos</div></div></div></div>
+      <div class="col-md-4"><div class="kpi-card warning"><div class="kpi-header"><div class="kpi-icon amber">⏳</div></div><div><div class="kpi-value">2</div><div class="kpi-label">En progreso</div></div></div></div>
+      <div class="col-md-4"><div class="kpi-card neutral"><div class="kpi-header"><div class="kpi-icon" style="background:var(--sand-300);color:var(--sand-900)">🏆</div></div><div><div class="kpi-value">1</div><div class="kpi-label">Completados</div></div></div></div>
+    </div>
+    <div class="row g-3 mb-4" id="objetivos-grid"></div>
+    <div class="panel">
+      <div class="panel-header"><div><div class="panel-title">➕ Nuevo Objetivo</div><div class="panel-subtitle">Define una meta de ahorro</div></div></div>
+      <div style="padding:24px">
+        <div class="row g-3">
+          <div class="col-md-4"><label class="form-label">Nombre del objetivo</label><input type="text" class="form-control" placeholder="ej. Viaje a Cartagena" id="obj-nombre"></div>
+          <div class="col-md-3"><label class="form-label">Monto meta (COP)</label><input type="number" class="form-control" placeholder="500000" id="obj-meta"></div>
+          <div class="col-md-3"><label class="form-label">Fecha límite</label><input type="date" class="form-control" id="obj-fecha"></div>
+          <div class="col-md-2 d-flex align-items-end"><button class="btn-primary w-100" onclick="agregarObjetivo()">Crear</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑥ ALERTAS ────────────────────────────── -->
+  <div class="page-body section-view" id="sec-alertas">
+    <div class="row g-3 mb-4">
+      <div class="col-md-4"><div class="kpi-card danger"><div class="kpi-header"><div class="kpi-icon coral">🚨</div></div><div><div class="kpi-value">3</div><div class="kpi-label">Alertas activas</div></div></div></div>
+      <div class="col-md-4"><div class="kpi-card success"><div class="kpi-header"><div class="kpi-icon teal">✅</div></div><div><div class="kpi-value">5</div><div class="kpi-label">Resueltas</div></div></div></div>
+      <div class="col-md-4"><div class="kpi-card neutral"><div class="kpi-header"><div class="kpi-icon" style="background:var(--sand-300);color:var(--sand-900)">🔔</div></div><div><div class="kpi-value">8</div><div class="kpi-label">Configuradas</div></div></div></div>
+    </div>
+    <div class="row g-3">
+      <div class="col-lg-8"><div class="panel"><div class="panel-header"><div><div class="panel-title">Centro de Alertas</div><div class="panel-subtitle">Notificaciones recientes</div></div></div><div id="alertas-list"></div></div></div>
+      <div class="col-lg-4"><div class="panel"><div class="panel-header"><div><div class="panel-title">Configurar</div><div class="panel-subtitle">¿Cuándo avisarte?</div></div></div><div style="padding:20px 24px" id="alertas-config"></div></div></div>
+    </div>
+  </div>
+
+  <!-- ⑦ CONFIGURACIÓN ─────────────────────── -->
+  <div class="page-body section-view" id="sec-configuracion">
+    <div class="row g-3">
+      <div class="col-lg-4">
         <div class="panel">
-          <div class="panel-header">
-            <div>
-              <div class="panel-title">Tendencia 2025</div>
-              <div class="panel-subtitle">Gastos acumulados vs presupuesto mensual de $350,000</div>
-            </div>
-            <div class="panel-actions">
-              <button class="btn-outline">Ver detalle</button>
+          <div class="panel-header"><div><div class="panel-title">Mi Perfil</div><div class="panel-subtitle">Información de cuenta</div></div></div>
+          <div style="padding:24px;text-align:center">
+            <div style="width:72px;height:72px;background:linear-gradient(135deg,#2D9B9B,#E8785F);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:white;margin:0 auto 16px">MA</div>
+            <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:4px">María Alejandra</div>
+            <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px">demo@zent.app</div>
+            <span style="background:#C8EEEE;color:#1A4F4F;font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px">Plan Pro ✨</span>
+            <hr style="margin:20px 0;border-color:rgba(13,46,46,.08)">
+            <div style="text-align:left">
+              <div class="form-label">Nombre</div>
+              <input type="text" class="form-control mb-3" value="María Alejandra">
+              <div class="form-label">Email</div>
+              <input type="email" class="form-control mb-3" value="demo@zent.app">
+              <div class="form-label">Ciudad</div>
+              <input type="text" class="form-control mb-4" value="Medellín, Colombia">
+              <button class="btn-primary w-100" onclick="showToast('✅ Perfil actualizado','success')">Guardar cambios</button>
             </div>
           </div>
-          <div class="chart-wrap">
-            <canvas id="chartLine" height="120"></canvas>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="row g-3">
+          <div class="col-12">
+            <div class="panel">
+              <div class="panel-header"><div><div class="panel-title">Preferencias</div><div class="panel-subtitle">Personaliza tu experiencia</div></div></div>
+              <div style="padding:24px">
+                <div class="row g-3">
+                  <div class="col-md-6"><div class="form-label">Moneda</div><select class="form-select"><option selected>COP — Peso Colombiano</option><option>USD — Dólar</option><option>EUR — Euro</option></select></div>
+                  <div class="col-md-6"><div class="form-label">Inicio del mes</div><select class="form-select"><option selected>1 — Primero del mes</option><option>15 — Quincena</option></select></div>
+                  <div class="col-md-6"><div class="form-label">Formato de fecha</div><select class="form-select"><option selected>DD/MM/YYYY</option><option>MM/DD/YYYY</option></select></div>
+                  <div class="col-md-6"><div class="form-label">Idioma</div><select class="form-select"><option selected>Español (Colombia)</option><option>English</option></select></div>
+                  <div class="col-12"><button class="btn-primary" onclick="showToast('✅ Preferencias guardadas','success')">Guardar preferencias</button></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="panel">
+              <div class="panel-header"><div><div class="panel-title">Notificaciones</div><div class="panel-subtitle">Controla cuándo te avisamos</div></div></div>
+              <div style="padding:20px 24px" id="config-notif"></div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="panel">
+              <div class="panel-header"><div><div class="panel-title">Exportar datos</div></div></div>
+              <div style="padding:20px 24px;display:flex;flex-direction:column;gap:10px">
+                <button class="btn-outline" onclick="showToast('📊 Descargando CSV…','success')">📊 Exportar a CSV</button>
+                <button class="btn-outline" onclick="showToast('📄 Generando PDF…','success')">📄 Exportar a PDF</button>
+                <button class="btn-outline" onclick="showToast('📦 Backup listo','success')">📦 Backup completo</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="panel">
+              <div class="panel-header"><div><div class="panel-title">Plan actual</div></div></div>
+              <div style="padding:20px 24px">
+                <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:#1F6060;margin-bottom:4px">Pro ✨</div>
+                <div style="font-size:13px;color:var(--text-muted);margin-bottom:16px">Historial ilimitado · Exportación · Sin anuncios</div>
+                <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px">Renovación: 18 Jul 2025</div>
+                <button class="btn-outline w-100" style="color:#D9614A" onclick="showToast('Gestionando suscripción…','warning')">Cancelar suscripción</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-  </div><!-- /page-body -->
 </main>
 
-<!-- ═══════════════════════════════════════════
-     MODAL AGREGAR GASTO
-═══════════════════════════════════════════ -->
+<!-- MODAL AGREGAR GASTO -->
 <div class="modal fade" id="modalGasto" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -401,32 +343,18 @@
       </div>
       <div class="modal-body">
         <form id="form-gasto">
-          <div class="mb-3">
-            <label class="form-label">Descripción</label>
-            <input id="g-nombre" type="text" class="form-control" placeholder="ej. Café Starbucks" required>
-          </div>
+          <div class="mb-3"><label class="form-label">Descripción</label><input id="g-nombre" type="text" class="form-control" placeholder="ej. Café Starbucks" required></div>
           <div class="row g-3 mb-3">
-            <div class="col-6">
-              <label class="form-label">Monto (COP)</label>
-              <input id="g-monto" type="number" class="form-control" placeholder="12500" min="100" required>
-            </div>
-            <div class="col-6">
-              <label class="form-label">Fecha</label>
-              <input id="g-fecha" type="date" class="form-control">
-            </div>
+            <div class="col-6"><label class="form-label">Monto (COP)</label><input id="g-monto" type="number" class="form-control" placeholder="12500" min="100" required></div>
+            <div class="col-6"><label class="form-label">Fecha</label><input id="g-fecha" type="date" class="form-control"></div>
           </div>
-          <div class="mb-4">
-            <label class="form-label">Categoría</label>
+          <div class="mb-4"><label class="form-label">Categoría</label>
             <select id="g-categoria" class="form-select" required>
               <option value="">— Seleccionar —</option>
-              <option value="food">🍔 Comida</option>
-              <option value="transport">🚗 Transporte</option>
-              <option value="cafe">☕ Café & Bebidas</option>
-              <option value="digital">💻 Digital / Suscripciones</option>
-              <option value="health">💊 Salud</option>
-              <option value="leisure">🎭 Entretenimiento</option>
-              <option value="beauty">💅 Belleza</option>
-              <option value="other">📌 Otros</option>
+              <option value="food">🍔 Comida</option><option value="transport">🚗 Transporte</option>
+              <option value="cafe">☕ Café & Bebidas</option><option value="digital">💻 Digital</option>
+              <option value="health">💊 Salud</option><option value="leisure">🎭 Entretenimiento</option>
+              <option value="beauty">💅 Belleza</option><option value="other">📌 Otros</option>
             </select>
           </div>
           <div class="d-flex gap-2 justify-content-end">
@@ -439,21 +367,14 @@
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
   <div id="toast-zent" class="toast align-items-center text-white border-0" role="alert">
-    <div class="d-flex">
-      <div class="toast-body" id="toast-msg">Acción completada</div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-    </div>
+    <div class="d-flex"><div class="toast-body" id="toast-msg">Acción completada</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>
   </div>
 </div>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<!-- ZENT JS -->
 <script src="../js/zent.js"></script>
 </body>
 </html>
